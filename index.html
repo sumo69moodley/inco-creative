@@ -8,13 +8,15 @@
   <meta property="og:title" content="iNCO Creative – Digital experiences people love">
   <meta property="og:description" content="Brand strategy, social media, web design and video production from Durban, Johannesburg and Cape Town.">
   <meta property="og:type" content="website">
-  <meta name="theme-color" content="#003D57">
+  <meta name="theme-color" content="#050E14">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+  <noscript><style>.hero.is-loading .letterbox{height:5.5vh}.hero.is-loading .caption.is-active .line>span{transform:none}.hero.is-loading .caption.is-active .chapter,.hero.is-loading .caption.is-active .hero-sub{opacity:1;transform:none;filter:none}.hero-nav{display:none}</style></noscript>
 </head>
 <body>
+<div class="grain" aria-hidden="true"></div>
 
 <!-- ============ HEADER ============ -->
 <header class="site-header" id="top">
@@ -34,32 +36,86 @@
   </div>
 </header>
 
-<!-- ============ HERO ============ -->
-<section class="hero">
-  <div class="hero-bg" aria-hidden="true">
-    <span class="orb orb-1"></span><span class="orb orb-2"></span><span class="orb orb-3"></span>
-    <span class="hero-watermark">iNCO</span>
+<!-- ============ HERO (cinematic slideshow) ============ -->
+<section class="hero is-loading" aria-roledescription="carousel" aria-label="iNCO Creative showreel">
+  <div class="hero-slides" aria-hidden="true">
+      <figure class="slide is-active"><img src="https://incocreative.com/wp-content/uploads/2026/09/inco-hub-hero.jpg" alt="" fetchpriority="high" style="object-position:center 40%"></figure>
+      <figure class="slide"><img src="https://incocreative.com/wp-content/uploads/2026/09/inco-hub-photography.jpg" alt="" loading="lazy" style="object-position:center 35%"></figure>
+      <figure class="slide"><img src="https://incocreative.com/wp-content/uploads/2026/09/inco-hub-switcher.jpg" alt="" loading="lazy" style="object-position:center 45%"></figure>
+      <figure class="slide"><img src="https://incocreative.com/wp-content/uploads/2026/09/inco-hub-camera.jpg" alt="" loading="lazy" style="object-position:center 40%"></figure>
+      <figure class="slide"><img src="https://incocreative.com/wp-content/uploads/2026/09/inco-hub-control.jpg" alt="" loading="lazy" style="object-position:center 40%"></figure>
   </div>
+  <div class="hero-shade" aria-hidden="true"></div>
+  <div class="hero-leak" aria-hidden="true"></div>
+  <div class="letterbox lb-top" aria-hidden="true"></div>
+  <div class="letterbox lb-bottom" aria-hidden="true"></div>
+
+  <div class="hero-hud" aria-hidden="true">
+    <span class="rec"><i></i>REC</span>
+    <span class="tc" id="timecode">00:00:00:00</span>
+    <span class="fmt">4K · 24 FPS · 2.39:1</span>
+  </div>
+
   <div class="container hero-inner">
-    <p class="eyebrow reveal"><span class="dot"></span> Design &amp; Media Agency · Durban · Johannesburg · Cape Town</p>
-    <h1 class="hero-title reveal">
-      Design that defines.<br>
-      Stories that <em>stick.</em><br>
-      <span class="outline">Experiences people love.</span>
-    </h1>
-    <p class="hero-sub reveal">We're artisans of digital experiences — one creative team behind your brand, social media, website and video. So your brand doesn't just get noticed. It gets remembered.</p>
-    <div class="hero-ctas reveal">
-      <a href="#contact" class="btn btn-primary">Start your project <span class="arrow">→</span></a>
+    <p class="eyebrow"><span class="dot"></span> Design &amp; Media Agency · Durban · Johannesburg · Cape Town</p>
+    <div class="hero-captions" aria-live="polite">
+        <div class="caption is-active" data-cta="Start your project" data-service="">
+          <p class="chapter"><span>01</span>iNCO Creative</p>
+          <h1 class="hero-title"><span class="line"><span>Experiences</span></span><span class="line"><span>people <em>love.</em></span></span></h1>
+          <p class="hero-sub">We're artisans of digital experiences — one creative team behind your brand, social media, website and video. So your brand doesn't just get noticed. It gets remembered.</p>
+        </div>
+        <div class="caption" data-cta="Brief us on your brand" data-service="Digital Design & Branding" aria-hidden="true">
+          <p class="chapter"><span>02</span>Digital Design &amp; Branding</p>
+          <h2 class="hero-title"><span class="line"><span>Design that</span></span><span class="line"><span><em>defines.</em></span></span></h2>
+          <p class="hero-sub">Identity, positioning and visual systems that build recognition and trust — and make your brand impossible to forget.</p>
+        </div>
+        <div class="caption" data-cta="Book a shoot" data-service="Video Production" aria-hidden="true">
+          <p class="chapter"><span>03</span>Video Production &amp; Storytelling</p>
+          <h2 class="hero-title"><span class="line"><span>Stories that</span></span><span class="line"><span><em>stick.</em></span></span></h2>
+          <p class="hero-sub">From concept to final cut — brand films, event coverage, reels and music videos that tell your story in motion.</p>
+        </div>
+        <div class="caption" data-cta="Grow my socials" data-service="Social Media Marketing" aria-hidden="true">
+          <p class="chapter"><span>04</span>Social Media Marketing</p>
+          <h2 class="hero-title"><span class="line"><span>Content that stops</span></span><span class="line"><span>the <em>scroll.</em></span></span></h2>
+          <p class="hero-sub">Content calendars, creative and community management that grow engagement and turn followers into enquiries.</p>
+        </div>
+        <div class="caption" data-cta="Plan my website" data-service="Web Design & Development" aria-hidden="true">
+          <p class="chapter"><span>05</span>Web Design &amp; Development</p>
+          <h2 class="hero-title"><span class="line"><span>Websites built</span></span><span class="line"><span>to <em>convert.</em></span></span></h2>
+          <p class="hero-sub">Professional, fast, search-friendly websites that communicate your value and turn visitors into customers.</p>
+        </div>
+    </div>
+    <div class="hero-ctas">
+      <a href="#contact" class="btn btn-primary" id="heroCta">Start your project <span class="arrow">→</span></a>
       <a href="#work" class="btn btn-ghost">View our work</a>
     </div>
-    <ul class="hero-badges reveal">
-      <li><strong>Level 1</strong><span>B-BBEE Contributor</span></li>
-      <li><strong>3 cities</strong><span>DBN · JHB · CPT</span></li>
-      <li><strong>Award-winning</strong><span>Favourite Local Business 2019</span></li>
-    </ul>
   </div>
-  <a href="#services" class="scroll-cue" aria-label="Scroll to services"><span></span></a>
+
+  <div class="hero-nav">
+    <div class="container hero-nav-inner">
+      <button class="hero-dot is-active" data-i="0" aria-label="Show slide 1: Showreel"><span class="bar"><i></i></span><b>01</b><span class="lbl">Showreel</span></button>
+      <button class="hero-dot" data-i="1" aria-label="Show slide 2: Branding"><span class="bar"><i></i></span><b>02</b><span class="lbl">Branding</span></button>
+      <button class="hero-dot" data-i="2" aria-label="Show slide 3: Video"><span class="bar"><i></i></span><b>03</b><span class="lbl">Video</span></button>
+      <button class="hero-dot" data-i="3" aria-label="Show slide 4: Social"><span class="bar"><i></i></span><b>04</b><span class="lbl">Social</span></button>
+      <button class="hero-dot" data-i="4" aria-label="Show slide 5: Web"><span class="bar"><i></i></span><b>05</b><span class="lbl">Web</span></button>
+      <div class="hero-controls">
+        <button class="hc-btn" id="heroPrev" aria-label="Previous slide">←</button>
+        <button class="hc-btn" id="heroPause" aria-label="Pause slideshow" aria-pressed="false"><span class="i-pause"></span></button>
+        <button class="hc-btn" id="heroNext" aria-label="Next slide">→</button>
+      </div>
+    </div>
+  </div>
 </section>
+
+<!-- ============ CREDITS STRIP ============ -->
+<div class="credits">
+  <ul class="container credits-inner">
+    <li><strong>Level 1</strong><span>B-BBEE Contributor</span></li>
+    <li><strong>3 cities</strong><span>DBN · JHB · CPT</span></li>
+    <li><strong>Award-winning</strong><span>Favourite Local Business 2019</span></li>
+    <li><strong>One team</strong><span>Brand · Social · Web · Video</span></li>
+  </ul>
+</div>
 
 <!-- ============ MARQUEE ============ -->
 <div class="marquee" aria-hidden="true">
@@ -231,18 +287,42 @@
     <div class="section-head center">
       <p class="kicker">Trusted by</p>
       <h2>Brands that trust us with theirs.</h2>
+      <p class="section-sub">From national FMCG names to tourism bodies, property and professional firms — the brands we've helped get noticed and remembered.</p>
     </div>
   </div>
-  <div class="client-marquee">
-    <div class="client-track">
-      <span>Durban ICC</span><span>OK Foods</span><span>Flora</span><span>Ultra Pet</span><span>Masana</span><span>USDA</span><span>Harcourts</span><span>Road Trippers</span><span>CrampEase</span><span>OsteoEze</span><span>Amintro</span><span>Moses Kotane Institute</span><span>ARTsolar</span><span>Westville Eyecare</span>
-      <span>Durban ICC</span><span>OK Foods</span><span>Flora</span><span>Ultra Pet</span><span>Masana</span><span>USDA</span><span>Harcourts</span><span>Road Trippers</span><span>CrampEase</span><span>OsteoEze</span><span>Amintro</span><span>Moses Kotane Institute</span><span>ARTsolar</span><span>Westville Eyecare</span>
-    </div>
+  <div class="logo-marquee">
+    <ul class="logo-track">
+        <li class="logo-tile"><img src="https://incocreative.com/wp-content/uploads/2025/05/small_logo.png" alt="RCL Foods" loading="lazy" decoding="async"></li>
+        <li class="logo-tile"><img src="https://incocreative.com/wp-content/uploads/2023/05/DURBAN-ICC-LOGO-2013.png" alt="Durban ICC" loading="lazy" decoding="async"></li>
+        <li class="logo-tile"><img src="https://incocreative.com/wp-content/uploads/2025/05/OK-Count-On-Logo_.jpg" alt="OK Foods" loading="lazy" decoding="async"></li>
+        <li class="logo-tile"><img src="https://incocreative.com/wp-content/uploads/2025/05/flora-logo-vector.svg" alt="Flora" loading="lazy" decoding="async"></li>
+        <li class="logo-tile"><img src="https://incocreative.com/wp-content/uploads/2025/05/ultra-pet-logo.webp" alt="Ultra Pet" loading="lazy" decoding="async"></li>
+        <li class="logo-tile"><img src="https://incocreative.com/wp-content/uploads/2025/05/orange-logo-2-scaled.png" alt="Tourism &amp; Film KwaZulu-Natal" loading="lazy" decoding="async"></li>
+        <li class="logo-tile"><img src="https://incocreative.com/wp-content/uploads/2025/05/Screenshot-2025-05-13-at-11.55.54.png" alt="Msinsi Holdings" loading="lazy" decoding="async"></li>
+        <li class="logo-tile"><img src="https://incocreative.com/wp-content/uploads/2025/05/masana_main_logo_cc.svg" alt="Masana" loading="lazy" decoding="async"></li>
+        <li class="logo-tile"><img src="https://incocreative.com/wp-content/uploads/2025/05/Usda.jpeg" alt="USDA" loading="lazy" decoding="async"></li>
+        <li class="logo-tile"><img src="https://incocreative.com/wp-content/uploads/2025/05/Full-ColourVCT-300x105.png" alt="Versatile Commodity Traders" loading="lazy" decoding="async"></li>
+    </ul>
+  </div>
+  <div class="logo-marquee reverse">
+    <ul class="logo-track">
+        <li class="logo-tile"><img src="https://incocreative.com/wp-content/uploads/2020/02/TM-Logo-Black.png" alt="Tiger's Milk" loading="lazy" decoding="async"></li>
+        <li class="logo-tile"><img src="https://incocreative.com/wp-content/uploads/2023/05/Roadtrippers-Logo-2019-With-Slogan-NO-BG.png" alt="Road Trippers Travel" loading="lazy" decoding="async"></li>
+        <li class="logo-tile"><img src="https://incocreative.com/wp-content/uploads/2025/05/CRAMPEASE-LOGO-AND-TAGLINE-04.png" alt="CrampEase" loading="lazy" decoding="async"></li>
+        <li class="logo-tile"><img src="https://incocreative.com/wp-content/uploads/2025/05/osteoeze-logo-nav.svg" alt="OsteoEze" loading="lazy" decoding="async"></li>
+        <li class="logo-tile"><img src="https://incocreative.com/wp-content/uploads/2020/03/nmalogoweb-uai-258x89-1.png" alt="NMA Attorneys &amp; Conveyancers" loading="lazy" decoding="async"></li>
+        <li class="logo-tile"><img src="https://incocreative.com/wp-content/uploads/2023/05/Harcourts-logo-B1.png" alt="Harcourts" loading="lazy" decoding="async"></li>
+        <li class="logo-tile"><img src="https://incocreative.com/wp-content/uploads/2023/05/Amintro_Tagline_RGB-copy-2048x719.png" alt="Amintro" loading="lazy" decoding="async"></li>
+        <li class="logo-tile"><img src="https://incocreative.com/wp-content/uploads/2021/02/Untitled-design14.png" alt="Samyang" loading="lazy" decoding="async"></li>
+        <li class="logo-tile"><img src="https://incocreative.com/wp-content/uploads/2020/02/logo_1.png" alt="Moses Kotane Institute" loading="lazy" decoding="async"></li>
+        <li class="logo-tile"><img src="https://incocreative.com/wp-content/uploads/2023/05/NEW-TKZN-logo-2020-May.png" alt="Tourism KwaZulu-Natal" loading="lazy" decoding="async"></li>
+    </ul>
   </div>
 </section>
 
 <!-- ============ BIG CTA ============ -->
 <section class="big-cta">
+  <div class="big-cta-bg" aria-hidden="true" style="background-image:url('https://incocreative.com/wp-content/uploads/2026/09/inco-hub-lounge.jpg')"></div>
   <div class="container big-cta-inner reveal">
     <h2>Got a project in mind?</h2>
     <p>Tell us what you're building. We'll come back with ideas and a free, no-obligation quote.</p>
