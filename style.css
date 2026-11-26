@@ -27,7 +27,7 @@
 }
 *,*::before,*::after{box-sizing:border-box}
 html{scroll-behavior:smooth;overflow-x:clip;background:var(--night)}
-body{margin:0;font-family:var(--body);font-size:17px;line-height:1.65;color:var(--text);background:var(--night);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+body{margin:0;font-family:var(--body);font-size:17px;line-height:1.65;color:var(--text);background:var(--night);-webkit-font-smoothing:antialiased;overflow-x:clip}
 img{max-width:100%;display:block}
 a{color:inherit;text-decoration:none}
 button{font:inherit}
@@ -566,7 +566,7 @@ em{font-style:normal;color:var(--orange)}
 .stats-strip div:first-child{border-left:0}
 .stats-strip strong{display:block;font-family:var(--head);font-weight:700;font-size:clamp(2rem,4vw,3rem);line-height:1;color:#fff}
 .stats-strip span{font-size:.78rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
-.sub-nav{position:sticky;top:64px;z-index:20;background:rgba(5,14,20,.82);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.sub-nav{position:sticky;top:68px;z-index:20;background:rgba(5,14,20,.82);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
 .sub-nav .container{display:flex;gap:8px;overflow-x:auto;padding:12px 0;scrollbar-width:none;align-items:center}
 .sub-nav .container::-webkit-scrollbar{display:none}
 .sub-nav b{font-family:var(--head);font-size:.8rem;letter-spacing:.2em;color:var(--orange);margin-right:14px;white-space:nowrap}
