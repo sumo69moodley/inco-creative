@@ -4,21 +4,38 @@
   const toggle = document.querySelector('.menu-toggle');
 
   // Sticky header style on scroll
-  const onScroll = () => header.classList.toggle('scrolled', window.scrollY > 40);
+  const onScroll = () => header && header.classList.toggle('scrolled', window.scrollY > 40);
   onScroll();
   window.addEventListener('scroll', onScroll, { passive: true });
 
   // Mobile menu
-  toggle.addEventListener('click', () => {
+  const closeMenu = () => { document.body.classList.remove('menu-open'); toggle && toggle.setAttribute('aria-expanded', 'false'); };
+  toggle && toggle.addEventListener('click', () => {
     const open = document.body.classList.toggle('menu-open');
     toggle.setAttribute('aria-expanded', open);
   });
-  document.querySelectorAll('.main-nav a').forEach(a =>
-    a.addEventListener('click', () => {
-      document.body.classList.remove('menu-open');
-      toggle.setAttribute('aria-expanded', 'false');
-    })
-  );
+  document.querySelectorAll('.main-nav a').forEach(a => a.addEventListener('click', closeMenu));
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMenu(); });
+
+  // Services dropdown (keyboard / touch)
+  document.querySelectorAll('.nav-drop').forEach(drop => {
+    const btn = drop.querySelector('.drop-toggle');
+    btn && btn.addEventListener('click', e => {
+      e.preventDefault();
+      const open = drop.classList.toggle('open');
+      btn.setAttribute('aria-expanded', open);
+    });
+    document.addEventListener('click', e => { if (!drop.contains(e.target)) { drop.classList.remove('open'); btn && btn.setAttribute('aria-expanded', 'false'); } });
+  });
+
+  // Sub-page hero: open the letterbox once the frame is ready
+  document.querySelectorAll('.page-hero.is-loading').forEach(hero => {
+    const img = hero.querySelector('.ph-media img');
+    const open = () => requestAnimationFrame(() => hero.classList.remove('is-loading'));
+    if (!img || img.complete) setTimeout(open, 60);
+    else { img.addEventListener('load', open); img.addEventListener('error', open); }
+    setTimeout(open, 1500);
+  });
 
   // Reveal on scroll
   const io = 'IntersectionObserver' in window
@@ -28,15 +45,16 @@
         });
       }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' })
     : null;
-  document.querySelectorAll('.reveal').forEach((el, i) => {
+  window.__reveal = root => (root || document).querySelectorAll('.reveal:not(.in)').forEach((el, i) => {
     el.style.transitionDelay = (i % 4) * 80 + 'ms';
     io ? io.observe(el) : el.classList.add('in');
   });
+  window.__reveal();
 
   // Portfolio filter
-  document.querySelectorAll('.filter').forEach(btn => {
+  document.querySelectorAll('.filter[data-filter]').forEach(btn => {
     btn.addEventListener('click', () => {
-      document.querySelectorAll('.filter').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.filter[data-filter]').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       const f = btn.dataset.filter;
       document.querySelectorAll('.project').forEach(p => {
@@ -46,46 +64,86 @@
     });
   });
 
-  // Service card CTAs pre-select the service in the quote form
-  document.querySelectorAll('.card-link[data-service]').forEach(link => {
-    link.addEventListener('click', () => {
-      const name = link.dataset.service.replace('&amp;', '&');
-      document.querySelectorAll('.chips input').forEach(cb => {
-        if (cb.value === name || (name === 'Video Production' && cb.value === 'Video Production')) cb.checked = true;
+  // Pre-select a service in the quote form from ?service= or data-service links
+  const pick = name => document.querySelectorAll('.chips input').forEach(cb => { if (cb.value === name) cb.checked = true; });
+  const qs = new URLSearchParams(location.search).get('service');
+  if (qs) pick(qs);
+  document.querySelectorAll('[data-service]').forEach(link => {
+    link.addEventListener('click', () => { if (link.dataset.service) pick(link.dataset.service.replace('&amp;', '&')); });
+  });
+
+  // Tabs (Hub pricing)
+  document.querySelectorAll('[role="tablist"]').forEach(list => {
+    const tabs = [...list.querySelectorAll('[role="tab"]')];
+    const show = t => tabs.forEach(x => {
+      const on = x === t;
+      x.setAttribute('aria-selected', on);
+      x.tabIndex = on ? 0 : -1;
+      const panel = document.getElementById(x.getAttribute('aria-controls'));
+      if (panel) panel.hidden = !on;
+    });
+    tabs.forEach((t, i) => {
+      t.addEventListener('click', () => show(t));
+      t.addEventListener('keydown', e => {
+        if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+          const n = tabs[(i + (e.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length];
+          n.focus(); show(n);
+        }
       });
     });
   });
 
-  // Quote form → opens a pre-filled email to hello@incocreative.com
-  // (swap for Formspree / WordPress / HubSpot endpoint when going live)
-  const form = document.getElementById('quoteForm');
-  const note = form.querySelector('.form-note');
-  form.addEventListener('submit', e => {
-    e.preventDefault();
-    let ok = true;
-    form.querySelectorAll('[required]').forEach(f => {
-      const bad = !f.value.trim() || (f.type === 'email' && !/^\S+@\S+\.\S+$/.test(f.value));
-      f.classList.toggle('invalid', bad);
-      if (bad) ok = false;
+  // Links that open a specific pricing tab
+  document.querySelectorAll('[data-tab]').forEach(a => a.addEventListener('click', () => {
+    const t = document.getElementById(a.dataset.tab);
+    t && t.click();
+  }));
+
+  // Section highlight in sticky sub-nav (Hub)
+  const subLinks = [...document.querySelectorAll('.sub-nav a[href^="#"]')];
+  if (subLinks.length && 'IntersectionObserver' in window) {
+    const spy = new IntersectionObserver(entries => entries.forEach(e => {
+      if (e.isIntersecting) subLinks.forEach(a => a.classList.toggle('on', a.getAttribute('href') === '#' + e.target.id));
+    }), { rootMargin: '-45% 0px -50% 0px' });
+    subLinks.forEach(a => { const t = document.querySelector(a.getAttribute('href')); t && spy.observe(t); });
+  }
+
+  // Forms → open a pre-filled email (swap for Formspree / WordPress / HubSpot endpoint when going live)
+  document.querySelectorAll('form[data-mailto]').forEach(form => {
+    const note = form.querySelector('.form-note');
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      let ok = true;
+      form.querySelectorAll('[required]').forEach(f => {
+        const bad = !f.value.trim() || (f.type === 'email' && !/^\S+@\S+\.\S+$/.test(f.value));
+        f.classList.toggle('invalid', bad);
+        if (bad) ok = false;
+      });
+      if (!ok) { note && (note.textContent = 'Please complete the required fields (marked *) with a valid email.'); return; }
+      const d = new FormData(form);
+      const lines = [];
+      form.querySelectorAll('[name]').forEach(f => {
+        if (f.type === 'checkbox') return;
+        const label = (f.closest('label') && f.closest('label').firstChild.textContent.replace('*', '').trim()) || f.name;
+        if (f.name !== 'message') lines.push(`${label}: ${d.get(f.name) || '-'}`);
+      });
+      const picks = d.getAll('service');
+      if (form.querySelector('[name="service"]')) lines.push('Interested in: ' + (picks.join(', ') || 'Not specified'));
+      const body = lines.join('\n') + '\n\n' + (d.get('message') || '');
+      const subject = (form.dataset.subject || 'Website enquiry') + ' – ' + (d.get('name') || '');
+      window.location.href = 'mailto:' + form.dataset.mailto + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+      note && (note.textContent = 'Thanks! Your email app is opening with your message ready to send.');
     });
-    if (!ok) { note.textContent = 'Please fill in your name, a valid email and your mobile number.'; return; }
-    const d = new FormData(form);
-    const services = d.getAll('service').join(', ') || 'Not specified';
-    const body =
-      `Name: ${d.get('name')}\nEmail: ${d.get('email')}\nMobile: ${d.get('mobile')}\n` +
-      `Company: ${d.get('company') || '-'}\nInterested in: ${services}\n\n${d.get('message') || ''}`;
-    window.location.href = 'mailto:hello@incocreative.com?subject=' +
-      encodeURIComponent('Quote request – ' + d.get('name')) + '&body=' + encodeURIComponent(body);
-    note.textContent = 'Thanks! Your email app is opening with your enquiry ready to send.';
   });
 
-  document.getElementById('year').textContent = new Date().getFullYear();
+  const y = document.getElementById('year');
+  if (y) y.textContent = new Date().getFullYear();
 })();
 
 // ---------- Cinematic hero slideshow ----------
 (function () {
-  const hero = document.querySelector('.hero');
-  if (!hero) return;
+  const hero = document.querySelector('section.hero');
+  if (!hero || !hero.querySelector('.slide')) return;
   const slides = [...hero.querySelectorAll('.slide')];
   const caps = [...hero.querySelectorAll('.caption')];
   const dots = [...hero.querySelectorAll('.hero-dot')];

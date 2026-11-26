@@ -1,43 +1,46 @@
-# iNCO Creative — Website Redesign (2026)
+# iNCO Creative — Website Redesign (2026, cinematic edition)
 
-A premium, conversion-focused redesign of [incocreative.com](https://incocreative.com), built as a fast static site (HTML + CSS + vanilla JS, no build step).
+A premium, conversion-focused redesign of [incocreative.com](https://incocreative.com): a fast static site (HTML + CSS + vanilla JS) with a dark, cinematic look — film grain, letterbox heroes, Ken Burns imagery and slow blur-in reveals — in the iNCO brand colours.
 
-## Files
-| File | Purpose |
+## Pages
+| Page | File |
 |---|---|
-| `index.html` | Full one-page site: hero, services, why-it-matters, work, process, about/awards, clients, CTA, contact |
-| `style.css` | Brand design system (colours, type, components, responsive) |
-| `main.js` | Sticky header, mobile menu, scroll reveals, portfolio filter, quote form |
+| Home (cinematic hero slideshow) | `index.html` |
+| Services overview | `services.html` |
+| Digital Design & Branding | `digital-design-branding.html` |
+| Social Media Marketing | `social-media-marketing.html` |
+| Video Production | `video-production.html` |
+| Web Design & Development | `web-design-development.html` |
+| iNCO Creative Hub (studios, gallery, pricing tabs, FAQ) | `creative-hub.html` |
+| Work / portfolio | `work.html` |
+| About (Talent) | `about.html` |
+| Clients (logo wall) | `clients.html` |
+| Contact (quote form, 3 offices + maps) | `contact.html` |
+| Internships (application form) | `internships.html` |
+| Blog listing — live from WordPress | `blog.html` |
+| Blog article — live from WordPress | `article.html?slug=…` |
+| Website Privacy Policy | `privacy-policy.html` |
+| Data Processing Policy | `data-processing-policy.html` |
+| Multimedia Ts & Cs | `multimedia-terms.html` |
+| Graphic & Web Design Ts & Cs | `graphic-web-design-terms.html` |
 
-Open `index.html` in a browser to preview. Deploys as-is to GitHub Pages, Netlify, Vercel or any host.
+Shared files: `style.css` (design system), `main.js` (header, menu, reveals, slideshow, tabs, forms), `blog.js` (blog + article).
 
-## Brand system (taken from the current site)
-| Token | Hex | Use |
-|---|---|---|
-| Navy | `#003D57` | Primary background, headings |
-| Teal | `#176F6F` / `#1E8A80` | About section, accents |
-| Orange | `#EE6020` / `#FC6625` | Primary CTAs, highlights |
-| Amber | `#FC9234` | Secondary accent |
-| Fonts | Poppins (headings), Roboto (body) | |
+## How to edit (important)
+Every page is generated from `_build/`, so the header, navigation and footer stay identical everywhere.
 
-## What changed vs. the current site
-1. **Clear value proposition in the hero** — headline + subline + two CTAs above the fold, instead of an illustration-led banner.
-2. **CTAs everywhere it matters** — header "Get a Quote", hero, every service card (pre-selects the service in the form), work section, about, full-width orange CTA band, floating WhatsApp, click-to-call.
-3. **Proof up front** — Level 1 B-BBEE, 3 cities and the Favourite Local Business 2019 award surface in the hero and About section.
-4. **Service pages content consolidated** — the current service pages are mostly empty headings; the six "why it matters" benefits are now one strong section.
-5. **Work-first portfolio** — large image cards with category filters, linking to existing case studies.
-6. **Process section** — Discover → Define → Create → Launch & grow, to reassure new clients.
-7. **Clients** — scrolling client wall (Durban ICC, OK Foods, Flora, Harcourts and more).
-8. **Smarter quote form** — service chips, validation, mobile number, company.
-9. **Performance & SEO** — no page builder bloat, semantic HTML, meta/OG tags, `prefers-reduced-motion` support, mobile-first layouts.
+1. Edit the page body in `_build/pages/<page>.html` (the JSON block at the top holds the title, SEO description and hero).
+2. Edit the shared header / nav / footer / page hero in `_build/build.py`.
+3. Run `python3 _build/build.py` — it rewrites the `.html` files in the root.
+
+Editing a root `.html` file directly works, but it will be overwritten the next time the build runs. GitHub Pages never publishes the `_build` folder.
+
+## Blog
+`blog.html` and `article.html` read posts live from the WordPress REST API at `incocreative.com/wp-json/wp/v2`, so new posts published in WordPress appear automatically. If WordPress is ever switched off, the blog needs a new source.
 
 ## Before going live (to-do)
-- [ ] **Images**: project images and the logo are currently hot-linked from incocreative.com/wp-content. Download them into an `images/` folder and update the paths (and add a dark-on-light logo variant if needed).
-- [ ] **Form**: the quote form currently opens a pre-filled email to hello@incocreative.com. Connect it to Formspree, WordPress (Contact Form 7 / WPForms) or your CRM for proper lead capture.
-- [ ] **Legal links** in the footer (`data-todo`) — point to the existing Privacy Policy and Ts & Cs pages.
-- [ ] Add hero showreel video (a muted, looping MP4 behind the hero works well for a video studio).
-- [ ] Add client testimonials and results/numbers to each case study.
+- [ ] **Images**: photos and logos are hot-linked from `incocreative.com/wp-content/uploads`. Copy them into an `images/` folder if the WordPress site will be retired.
+- [ ] **Forms**: quote, contact and internship forms open a pre-filled email. Connect them to Formspree, WordPress or a CRM for proper lead capture.
+- [ ] **Hub copy check**: the Hub page (copied as-is) says "Five studios" while listing three, and mentions "Gauteng" for free on-location travel.
+- [ ] **Ts & Cs**: the old site's accept/decline forms and "Download PDF" links weren't carried over; the "Why we don't provide raws" panel on Multimedia Ts & Cs had no text to copy.
 - [ ] Add Google Analytics / Meta Pixel.
-
-## Reference sites used for direction
-Huge (point-of-view hero), Instrument (work-led homepage), Collins (consistent case studies), That Lot & Mosaic (full-screen video hero), 72andSunny (scroll-guided sections), Hello Monday (purposeful motion).
