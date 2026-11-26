@@ -283,8 +283,8 @@ em{font-style:normal;color:var(--orange)}
 .logo-track{list-style:none;margin:0;padding:0;display:flex;gap:18px;width:max-content;animation:marquee 60s linear infinite}
 .logo-marquee.reverse .logo-track{animation-direction:reverse;animation-duration:66s}
 .logo-marquee:hover .logo-track{animation-play-state:paused}
-.logo-tile{flex:0 0 auto;width:210px;height:112px;display:grid;place-items:center;padding:20px 26px;border-radius:14px;background:#F4F2EE;border:1px solid rgba(255,255,255,.6);transition:transform .45s var(--ease),box-shadow .45s var(--ease),background .4s}
-.logo-tile img{max-width:100%;max-height:62px;width:auto;height:auto;object-fit:contain;filter:grayscale(1) contrast(1.05);opacity:.72;transition:filter .45s,opacity .45s}
+.logo-tile{flex:0 0 auto;width:210px;height:112px;display:grid;place-items:center;padding:20px 26px;border-radius:14px;background:#fff;border:1px solid rgba(255,255,255,.6);transition:transform .45s var(--ease),box-shadow .45s var(--ease),background .4s}
+.logo-tile img{max-width:100%;max-height:62px;width:auto;height:auto;object-fit:contain;filter:grayscale(1) contrast(1.1);opacity:.85;mix-blend-mode:multiply;transition:filter .45s,opacity .45s}
 .logo-tile:hover{transform:translateY(-4px);background:#fff;box-shadow:0 24px 50px -24px rgba(238,96,32,.55)}
 .logo-tile:hover img{filter:none;opacity:1}
 .logo-tile.broken{display:none}
