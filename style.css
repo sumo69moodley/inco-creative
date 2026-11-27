@@ -131,8 +131,8 @@ em{font-style:normal;color:var(--orange)}
 @keyframes pulse{50%{box-shadow:0 0 0 8px rgba(238,96,32,0)}}
 
 .hero-captions{display:grid;max-width:1100px}
-.caption{grid-area:1/1;pointer-events:none}
-.caption.is-active{pointer-events:auto}
+.caption{grid-area:1/1;pointer-events:none;opacity:0;transition:opacity .35s ease}
+.caption.is-active{pointer-events:auto;opacity:1;transition:none}
 .chapter{display:flex;align-items:center;gap:14px;font-family:var(--head);font-size:.8rem;font-weight:500;letter-spacing:.24em;text-transform:uppercase;color:var(--amber);margin-bottom:22px}
 .chapter span{font-weight:700;color:#fff;padding-right:14px;border-right:1px solid rgba(255,255,255,.35)}
 .hero-title{font-size:clamp(2.5rem,6.2vw,6.2rem);font-weight:700;line-height:.98;letter-spacing:-.045em;margin:0 0 .35em;text-shadow:0 10px 50px rgba(0,0,0,.35)}
@@ -141,14 +141,14 @@ em{font-style:normal;color:var(--orange)}
 .hero-sub{max-width:560px;font-size:1.12rem;color:rgba(255,255,255,.8);font-weight:300}
 
 /* caption choreography */
-.caption .chapter,.caption .hero-sub{opacity:0;transform:translateY(16px);filter:blur(6px);transition:opacity .7s var(--ease),transform .7s var(--ease),filter .7s var(--ease)}
-.caption .line>span{transform:translateY(110%);transition:transform .9s var(--ease-film)}
-.caption.is-active .chapter{opacity:1;transform:none;filter:none;transition-delay:.35s}
-.caption.is-active .line>span{transform:none}
+/* outgoing caption simply fades out; its parts reset only once invisible (no drop-down) */
+.caption .chapter,.caption .hero-sub{opacity:0;transform:translateY(16px);filter:blur(6px);transition:opacity 0s .4s,transform 0s .4s,filter 0s .4s}
+.caption .line>span{transform:translateY(110%);transition:transform 0s .4s}
+.caption.is-active .chapter{opacity:1;transform:none;filter:none;transition:opacity .7s var(--ease),transform .7s var(--ease),filter .7s var(--ease);transition-delay:.35s}
+.caption.is-active .line>span{transform:none;transition:transform .9s var(--ease-film)}
 .caption.is-active .line:nth-child(1)>span{transition-delay:.45s}
 .caption.is-active .line:nth-child(2)>span{transition-delay:.58s}
-.caption.is-active .hero-sub{opacity:1;transform:none;filter:none;transition-delay:.8s}
-.caption.is-leaving .line>span{transform:translateY(-110%);transition-duration:.6s}
+.caption.is-active .hero-sub{opacity:1;transform:none;filter:none;transition:opacity .7s var(--ease),transform .7s var(--ease),filter .7s var(--ease);transition-delay:.8s}
 .hero.is-loading .caption.is-active .line>span{transform:translateY(110%)}
 .hero.is-loading .caption.is-active .chapter,.hero.is-loading .caption.is-active .hero-sub{opacity:0;transform:translateY(16px)}
 .hero.is-loading .caption.is-active .line:nth-child(1)>span{transition-delay:1s}

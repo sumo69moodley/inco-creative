@@ -168,9 +168,6 @@
     n = (n + slides.length) % slides.length;
     if (n === i) return;
     hero.classList.add('is-playing');
-    caps[i].classList.add('is-leaving');
-    const prev = caps[i];
-    setTimeout(() => prev.classList.remove('is-leaving'), 900);
     [slides, caps, dots].forEach(list => list.forEach((el, k) => el.classList.toggle('is-active', k === n)));
     caps.forEach((c, k) => c.setAttribute('aria-hidden', k === n ? 'false' : 'true'));
     dots.forEach((d, k) => {
