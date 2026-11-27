@@ -50,6 +50,7 @@
     io ? io.observe(el) : el.classList.add('in');
   });
   window.__reveal();
+  document.querySelectorAll('.peace-hand').forEach(el => io ? io.observe(el) : el.classList.add('in'));
 
   // Portfolio filter
   document.querySelectorAll('.filter[data-filter]').forEach(btn => {

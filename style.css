@@ -785,3 +785,14 @@ em{font-style:normal;color:var(--orange)}
   .lb-prev{left:calc(50% - 60px)}.lb-next{right:calc(50% - 60px)}
 }
 .case-lead p+p{font-family:var(--body);font-size:1.05rem;line-height:1.75;color:rgba(233,238,241,.75)}
+
+/* ---------- iNCO peace hand beside "What we do" ---------- */
+.services-head{max-width:none;display:grid;grid-template-columns:minmax(0,860px) auto;justify-content:space-between;align-items:center;gap:40px}
+.peace-hand{width:auto;height:clamp(200px,22vw,320px);opacity:0;transform:translateY(40px) rotate(-8deg) scale(.92);filter:blur(8px) drop-shadow(0 30px 40px rgba(0,0,0,.55));transition:opacity 1.4s var(--ease),transform 1.4s var(--ease),filter 1.4s var(--ease);transform-origin:50% 90%}
+.peace-hand.in{opacity:1;transform:none;filter:drop-shadow(0 30px 40px rgba(0,0,0,.55));animation:handFloat 6s ease-in-out 1.6s infinite}
+@keyframes handFloat{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-12px) rotate(3deg)}}
+@media (max-width:640px){
+  .services-head{grid-template-columns:minmax(0,1fr) auto;gap:16px;align-items:end}
+  .peace-hand{height:120px}
+}
+@media (prefers-reduced-motion:reduce){.peace-hand{opacity:1;transform:none;filter:none}}
