@@ -182,15 +182,10 @@
     // per-slide CTA
     const label = caps[n].dataset.cta || 'Start your project';
     cta.innerHTML = label + ' <span class="arrow">→</span>';
-    cta.dataset.service = caps[n].dataset.service || '';
+    const svc = caps[n].dataset.service || '';
+    cta.href = 'contact.html' + (svc ? '?service=' + encodeURIComponent(svc) : '') + '#quote';
     i = n; elapsed = 0;
   }
-
-  cta.addEventListener('click', () => {
-    const svc = cta.dataset.service;
-    if (!svc) return;
-    document.querySelectorAll('.chips input').forEach(cb => { if (cb.value === svc) cb.checked = true; });
-  });
 
   dots.forEach((d, k) => d.addEventListener('click', () => go(k)));
   document.getElementById('heroNext').addEventListener('click', () => go(i + 1));

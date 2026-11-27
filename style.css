@@ -797,3 +797,29 @@ em{font-style:normal;color:var(--orange)}
   .peace-hand{height:120px}
 }
 @media (prefers-reduced-motion:reduce){.peace-hand{opacity:1;transform:none;filter:none}}
+
+/* ---------- Home: clean contact details ---------- */
+.contact-clean{background:var(--night-2)}
+.cc-lines{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;max-width:1080px;margin:0 auto}
+.cc-line{display:flex;align-items:center;gap:18px;padding:26px 26px;border-radius:var(--radius);border:1px solid var(--line);background:rgba(255,255,255,.025);transition:border-color .35s,background .35s,transform .35s var(--ease)}
+.cc-line:hover{border-color:rgba(238,96,32,.5);background:rgba(238,96,32,.06);transform:translateY(-3px)}
+.cc-line .ico,.cc-office .ico{flex:none;width:48px;height:48px;border-radius:50%;display:grid;place-items:center;color:var(--orange);background:rgba(238,96,32,.1);border:1px solid rgba(238,96,32,.25)}
+.cc-line .ico svg,.cc-office .ico svg{width:20px;height:20px}
+.cc-text{display:grid;gap:2px;min-width:0}
+.cc-text small{font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+.cc-text strong{font-family:var(--head);font-weight:600;font-size:1.05rem;color:#fff;overflow-wrap:anywhere}
+.cc-offices{display:grid;grid-template-columns:repeat(3,1fr);max-width:1080px;margin:56px auto 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.cc-office{display:flex;gap:16px;align-items:flex-start;padding:34px 26px}
+.cc-office+.cc-office{border-left:1px solid var(--line)}
+.cc-office .ico{width:40px;height:40px;background:transparent}
+.cc-office h3{font-size:1.05rem;margin:0 0 .35em;letter-spacing:.02em}
+.cc-office p{margin:0;color:var(--muted);font-size:.95rem;line-height:1.6}
+.cc-actions{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin-top:50px}
+@media (max-width:900px){
+  .cc-lines,.cc-offices{grid-template-columns:1fr}
+  .cc-office+.cc-office{border-left:0;border-top:1px solid var(--line)}
+  .cc-office{padding:24px 6px}
+}
+@media (max-width:640px){
+  .cc-actions .btn{flex:1 1 100%;justify-content:center}
+}
