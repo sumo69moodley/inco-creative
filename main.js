@@ -272,3 +272,43 @@
   window.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
 })();
+
+// ---------- Case studies: on-site lightbox + click-to-play video ----------
+(function () {
+  const items = [...document.querySelectorAll('.lb-open')];
+  if (items.length) {
+    const lb = document.createElement('div');
+    lb.className = 'lightbox';
+    lb.setAttribute('role', 'dialog');
+    lb.setAttribute('aria-modal', 'true');
+    lb.innerHTML = '<figure><img alt=""><figcaption></figcaption></figure>' +
+      '<button class="lb-btn lb-close" aria-label="Close">✕</button>' +
+      (items.length > 1 ? '<button class="lb-btn lb-prev" aria-label="Previous image">←</button><button class="lb-btn lb-next" aria-label="Next image">→</button>' : '');
+    document.body.appendChild(lb);
+    const img = lb.querySelector('img'), cap = lb.querySelector('figcaption');
+    let i = 0, last = null;
+    const show = n => { i = (n + items.length) % items.length; img.src = items[i].dataset.full; img.alt = items[i].dataset.caption; cap.textContent = items[i].dataset.caption; };
+    const open = n => { last = document.activeElement; show(n); lb.classList.add('open'); document.body.style.overflow = 'hidden'; lb.querySelector('.lb-close').focus(); };
+    const close = () => { lb.classList.remove('open'); document.body.style.overflow = ''; last && last.focus(); };
+    items.forEach((b, n) => b.addEventListener('click', () => open(n)));
+    lb.addEventListener('click', e => {
+      if (e.target === lb || e.target.closest('.lb-close')) close();
+      else if (e.target.closest('.lb-prev')) show(i - 1);
+      else if (e.target.closest('.lb-next')) show(i + 1);
+    });
+    document.addEventListener('keydown', e => {
+      if (!lb.classList.contains('open')) return;
+      if (e.key === 'Escape') close();
+      if (e.key === 'ArrowRight') show(i + 1);
+      if (e.key === 'ArrowLeft') show(i - 1);
+    });
+  }
+  document.querySelectorAll('.video-facade').forEach(btn => btn.addEventListener('click', () => {
+    const f = document.createElement('iframe');
+    f.src = 'https://www.youtube-nocookie.com/embed/' + btn.dataset.yt + '?autoplay=1&rel=0&modestbranding=1';
+    f.title = btn.getAttribute('aria-label');
+    f.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen';
+    f.allowFullscreen = true;
+    btn.replaceWith(f);
+  }));
+})();

@@ -1,7 +1,32 @@
 // iNCO Creative — blog (posts are read live from the WordPress site)
 (function () {
   const API = 'https://incocreative.com/wp-json/wp/v2';
-  const OLD_BLOG = 'https://incocreative.com/inco-blog/';
+  // Links in posts that point at the old WordPress site are kept on this site instead
+  const LOCAL = {
+    '': 'index.html', 'about': 'about.html', 'services': 'services.html', 'our-services': 'services.html',
+    'digital-design-branding': 'digital-design-branding.html', 'graphic-design-branding': 'digital-design-branding.html',
+    'social-media-marketing': 'social-media-marketing.html', 'video-production': 'video-production.html', 'videos': 'video-production.html',
+    'web-design-development': 'web-design-development.html', 'clients': 'clients.html', 'contact-us': 'contact.html', 'contact': 'contact.html',
+    'inco-creative-hub': 'creative-hub.html', 'portfolio-of-work': 'work.html', 'inco-blog': 'blog.html', 'blog': 'blog.html',
+    'internships': 'internships.html', 'privacy-policy': 'privacy-policy.html', 'data-processing-policy': 'data-processing-policy.html',
+    'multimedia-terms': 'multimedia-terms.html', 'graphic-web-design-ts-cs': 'graphic-web-design-terms.html', 'digital-marketing-agency': 'index.html'
+  };
+  const WORK = {
+    'artsolar-website-project': 'artsolar', 'jazz-in-the-drakensberg': 'jazz-in-the-drakensberg', 'westville-eyecare': 'westville-eyecare',
+    'we-have-it-all-aewon-wolf-kyle-deutsch': 'we-have-it-all', 'moses-kotane-institute': 'moses-kotane-institute',
+    'dr-sirlesh-moodley': 'dr-sirlesh-moodley', 'road-trippers-travel': 'road-trippers-travel'
+  };
+  const localise = href => {
+    let u;
+    try { u = new URL(href, 'https://incocreative.com/'); } catch (e) { return null; }
+    if (!/(^|\.)incocreative\.com$/.test(u.hostname) || u.pathname.startsWith('/wp-content/')) return null;
+    const parts = u.pathname.split('/').filter(Boolean);
+    if (parts[0] === 'portfolio') return WORK[parts[1]] ? 'work-' + WORK[parts[1]] + '.html' : 'work.html';
+    if (parts.length === 0) return 'index.html';
+    if (parts[0] in LOCAL) return LOCAL[parts[0]];
+    if (['category', 'tag', 'author', 'page'].includes(parts[0])) return 'blog.html';
+    return 'article.html?slug=' + encodeURIComponent(parts[parts.length - 1]);
+  };
   const PER_PAGE = 7; // 1 wide feature card + 6 cards = full rows
 
   const text = html => { const d = document.createElement('div'); d.innerHTML = html || ''; return (d.textContent || '').replace(/\s+/g, ' ').trim(); };
@@ -55,7 +80,7 @@
           `<button data-p="${i + 1}"${i + 1 === page ? ' aria-current="page"' : ''}>${i + 1}</button>`).join('') : '';
         window.__reveal && window.__reveal(grid);
       } catch (e) {
-        grid.innerHTML = `<p class="state-msg">We couldn't load the articles right now. <a href="${OLD_BLOG}" style="color:var(--amber)">Read them on our blog →</a></p>`;
+        grid.innerHTML = `<p class="state-msg">We couldn't load the articles right now — please try again in a moment.</p>`;
         pager.innerHTML = '';
       }
     }
@@ -93,7 +118,7 @@
     const cover = document.getElementById('articleCover');
     const fail = () => {
       titleEl.innerHTML = '<span class="line"><span>Article not found.</span></span>';
-      body.innerHTML = `<p>We couldn't load this article. <a href="blog.html">Back to the blog</a> or <a href="${OLD_BLOG}">read it on our previous blog</a>.</p>`;
+      body.innerHTML = `<p>We couldn't load this article. <a href="blog.html">Back to the blog</a>.</p>`;
     };
     if (!slug) { fail(); return; }
 
@@ -119,7 +144,16 @@
       d.querySelectorAll('script,style,noscript,form').forEach(x => x.remove());
       d.querySelectorAll('[style]').forEach(x => x.removeAttribute('style'));
       d.querySelectorAll('img').forEach(x => { x.loading = 'lazy'; x.removeAttribute('width'); x.removeAttribute('height'); x.removeAttribute('sizes'); });
-      d.querySelectorAll('a[href^="http"]').forEach(a => { a.target = '_blank'; a.rel = 'noopener'; });
+      d.querySelectorAll('a[href]').forEach(a => {
+        const local = localise(a.getAttribute('href'));
+        if (local) { a.setAttribute('href', local); a.removeAttribute('target'); return; }
+        if (/wp-content\/uploads\/.+\.(jpe?g|png|gif|webp)$/i.test(a.getAttribute('href'))) {
+          // image links open in place rather than leaving the site
+          a.replaceWith(...a.childNodes);
+          return;
+        }
+        if (/^https?:/.test(a.getAttribute('href'))) { a.target = '_blank'; a.rel = 'noopener'; }
+      });
       body.innerHTML = d.innerHTML;
 
       const share = document.getElementById('shareLinks');
