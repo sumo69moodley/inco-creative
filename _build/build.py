@@ -24,7 +24,7 @@ import json, re, pathlib, html
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 PAGES = ROOT / "_build" / "pages"
 UP = "https://incocreative.com/wp-content/uploads/"
-VERSION = "6"
+VERSION = "7"
 
 SERVICES = [
     ("digital-design-branding.html", "Digital Design &amp; Branding"),
