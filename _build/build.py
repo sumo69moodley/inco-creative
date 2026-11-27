@@ -24,7 +24,7 @@ import json, re, pathlib, html
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 PAGES = ROOT / "_build" / "pages"
 UP = "https://incocreative.com/wp-content/uploads/"
-VERSION = "4"
+VERSION = "5"
 
 SERVICES = [
     ("digital-design-branding.html", "Digital Design &amp; Branding"),
@@ -136,7 +136,152 @@ def cta_band(arg):
     )
 
 
+# ---------------------------------------------------------------------------
+# Portfolio: every project in _build/projects.json gets its own case-study
+# page (work-<slug>.html) and a card in {{work_grid}} on Home and Work.
+# ---------------------------------------------------------------------------
+PROJECTS = json.loads((ROOT / "_build" / "projects.json").read_text(encoding="utf-8"))
+
+
+def esc(s):
+    return html.escape(s, quote=True)
+
+
+def work_grid():
+    cards = []
+    for p in PROJECTS:
+        wide = " p-wide" if p.get("wide") else ""
+        cards.append(
+            f'      <a class="project{wide} reveal" data-cat="{" ".join(p["cats"])}" href="work-{p["slug"]}.html">\n'
+            f'        <div class="project-img" style="background-image:url(\'{UP}{p["card"]}\')"></div>\n'
+            f'        <div class="project-meta"><span class="tag">{p["tag"]}</span><h3>{esc(p["title"])}</h3>'
+            f'<span class="view">View case study →</span></div>\n      </a>')
+    return '<div class="work-grid">\n' + "\n".join(cards) + "\n    </div>"
+
+
+def case_study(p):
+    """Return (meta, body) for one project page."""
+    i = next(n for n, x in enumerate(PROJECTS) if x["slug"] == p["slug"])
+    num = f"{i + 1:02d}"
+    meta = {
+        "title": f'{p["title"]} | Case Study – iNCO Creative',
+        "description": re.sub("<[^>]+>", "", p["sub"]).replace("&amp;", "&"),
+        "nav": "work",
+        "hero": {"img": p["hero"], "pos": p.get("pos", "center"), "num": num, "kicker": p["tag"],
+                 "crumb": esc(p["title"]), "parent": ["work.html", "Work"],
+                 "lines": p["lines"], "sub": p["sub"],
+                 "ctas": [["Start a similar project", "contact.html#quote", "primary"], ["All work", "work.html", "ghost"]]},
+    }
+    facts = [("Client", p.get("client")), ("Industry", p.get("industry")), ("Project", p.get("type")),
+             ("Completed", p.get("year")), ("Category", p["tag"])]
+    facts_html = "".join(f"<li><strong>{v}</strong><span>{k}</span></li>" for k, v in facts if v)
+    body_ps = "".join(f"<p>{x}</p>" for x in p.get("body", []))
+    services = "".join(f"<li>{esc(s)}</li>" for s in p.get("services", []))
+    out = [f'''<div class="credits"><ul class="container credits-inner case-facts">{facts_html}</ul></div>
+
+<section class="section">
+  <div class="container case-intro">
+    <div class="case-main reveal">
+      <p class="kicker">{p.get("intro_h", "The project")}</p>
+      <div class="case-lead">{body_ps}</div>
+    </div>
+    <aside class="case-side reveal">
+      <h4>What we did</h4>
+      <ul class="tick-list">{services}</ul>
+      <a href="contact.html#quote" class="btn btn-primary btn-block">Start a similar project <span class="arrow">→</span></a>
+    </aside>
+  </div>
+</section>''']
+
+    if p.get("video"):
+        v = p["video"]
+        out.append(f'''<section class="section bg-2" style="padding-top:0;background:transparent">
+  <div class="container">
+    <div class="video-frame reveal">
+      <button class="video-facade" data-yt="{v}" aria-label="Play video: {esc(p["title"])}">
+        <img src="https://i.ytimg.com/vi/{v}/hqdefault.jpg" alt="" loading="lazy">
+        <span class="play-btn" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="currentColor"/></svg></span>
+        <span class="frame-tag"><i></i>PLAY FILM</span>
+      </button>
+    </div>
+  </div>
+</section>''')
+
+    if p.get("approach"):
+        steps = "\n".join(
+            f'      <article class="feature reveal"><span class="fnum">{n + 1:02d}</span><h3>{esc(h)}</h3><p>{esc(t)}</p></article>'
+            for n, (h, t) in enumerate(p["approach"]))
+        out.append(f'''<section class="section bg-navy">
+  <div class="container">
+    <div class="section-head reveal"><p class="kicker light">Our approach</p><h2>How we built it.</h2></div>
+    <div class="feature-grid">
+{steps}
+    </div>
+  </div>
+</section>''')
+
+    if p.get("outcomes") or p.get("quote"):
+        oc = "".join(f"<li>{esc(o)}</li>" for o in p.get("outcomes", []))
+        q = ""
+        if p.get("quote"):
+            q = (f'<figure class="case-quote reveal"><blockquote>“{esc(p["quote"][0])}”</blockquote>'
+                 f'<figcaption>— {esc(p["quote"][1])}</figcaption></figure>')
+        out.append(f'''<section class="section">
+  <div class="container split">
+    <div class="reveal"><p class="kicker">Project outcomes</p><h2>What changed.</h2><ul class="tick-list" style="grid-template-columns:1fr">{oc}</ul></div>
+    {q}
+  </div>
+</section>''')
+
+    if p.get("story"):
+        st = "".join(f"<p>{x}</p>" for x in p["story"])
+        out.append(f'''<section class="section bg-2">
+  <div class="container">
+    <div class="prose reveal"><p class="kicker">Behind the film</p><h2 style="border:0;padding:0;margin-top:0;font-size:clamp(1.6rem,3vw,2.4rem)">{p["story_h"]}</h2>{st}</div>
+  </div>
+</section>''')
+
+    if p.get("gallery"):
+        figs = "\n".join(
+            f'      <figure class="reveal"><button class="lb-open" data-full="{UP}{src}" data-caption="{esc(cap)}" aria-label="View larger: {esc(cap)}">'
+            f'<img src="{UP}{src}" alt="{esc(cap)}" loading="lazy"></button><figcaption>{esc(cap)}</figcaption></figure>'
+            for src, cap in p["gallery"])
+        out.append(f'''<section class="section">
+  <div class="container">
+    <div class="section-head reveal"><p class="kicker">Gallery</p><h2>The work.</h2></div>
+    <div class="case-gallery g{min(len(p["gallery"]), 4)}">
+{figs}
+    </div>
+  </div>
+</section>''')
+
+    if p.get("press"):
+        chips = "".join(f"<li>{esc(x)}</li>" for x in p["press"])
+        out.append(f'''<section class="section bg-2" style="padding:70px 0">
+  <div class="container press reveal"><p class="kicker">In the press</p><ul>{chips}</ul></div>
+</section>''')
+
+    if p.get("conclusion"):
+        out.append(f'''<section class="section">
+  <div class="container"><p class="kicker reveal">Conclusion</p><p class="statement reveal" style="font-size:clamp(1.2rem,2.2vw,1.7rem)">{esc(p["conclusion"])}</p></div>
+</section>''')
+
+    nxt = [PROJECTS[(i + k) % len(PROJECTS)] for k in (1, 2, 3)]
+    cards = "".join(
+        f'<a class="os-card reveal" href="work-{x["slug"]}.html"><img src="{UP}{x["card"]}" alt="" loading="lazy">'
+        f'<span>{esc(x["title"])}<b>→</b></span></a>' for x in nxt)
+    out.append(f'''<section class="section bg-2">
+  <div class="container">
+    <div class="section-head split"><div><p class="kicker">More of our work</p><h2>Next project.</h2></div><a href="work.html" class="btn btn-ghost">All work</a></div>
+    <div class="other-services">{cards}</div>
+  </div>
+</section>''')
+    out.append(cta_band("Got a project in mind?|Your brand could be our next case study. Tell us what you're building."))
+    return meta, "\n\n".join(out) + "\n"
+
+
 def expand(body):
+    body = body.replace("{{work_grid}}", work_grid())
     body = body.replace("{{up}}", UP)
     body = re.sub(r"\{\{icon:([a-z]+)\}\}", lambda m: icon(m.group(1)), body)
     body = re.sub(r"\{\{other_services:([^}]+)\}\}", lambda m: other_services(m.group(1).strip()), body)
@@ -310,6 +455,11 @@ def main():
         out = render(f.stem, meta, body)
         (ROOT / f.name).write_text(out, encoding="utf-8")
         built.append(f.name)
+    for p in PROJECTS:
+        meta, body = case_study(p)
+        name = f"work-{p['slug']}"
+        (ROOT / f"{name}.html").write_text(render(name, meta, body), encoding="utf-8")
+        built.append(f"{name}.html")
     print("built:", ", ".join(built))
 
 
